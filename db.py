@@ -19,8 +19,8 @@ SELECT title,
        count(*) AS num
 FROM articles,
      log
-WHERE PATH LIKE '%'||slug||'%'
-  AND status NOT LIKE '400%'
+WHERE log.path = CONCAT('/article/', articles.slug)
+  AND status = '200 OK'
 GROUP BY title,
          slug,
          PATH
