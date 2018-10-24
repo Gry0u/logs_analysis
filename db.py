@@ -47,9 +47,9 @@ SELECT name,
 FROM authors,
      articles,
      log
-WHERE PATH LIKE '%'||slug||'%'
+WHERE log.path = CONCAT('/article/', articles.slug)
   AND author = authors.id
-  AND status NOT LIKE '400%'
+  AND status = '200 OK'
 GROUP BY author,
          name
 ORDER BY num DESC;
