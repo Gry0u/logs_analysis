@@ -20,6 +20,7 @@ Given a database containing newspaper articles as well as web server log, the ai
   - **Error rates**  
   `create view error_rates as select requests_per_day.day, round(100*errors_per_day.total/requests_per_day.total,2)
   as error_rate from errors_per_day, requests_per_day where errors_per_day.day = requests_per_day.day;`
+7. Run code: `python db.py`
 ## Resources
 The database uses the [PostgreSQL](https://www.postgresql.org/) system.  
 The tool is written in [Python](https://www.python.org/).
