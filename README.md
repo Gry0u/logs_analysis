@@ -32,7 +32,7 @@ GROUP BY DAY;`
   - **Error rates**  
   `CREATE VIEW error_rates AS
 SELECT requests_per_day.day,
-       round(100*errors_per_day.total/requests_per_day.total, 2) AS error_rate
+       round(100.0*errors_per_day.total/requests_per_day.total, 2) AS error_rate
 FROM errors_per_day,
      requests_per_day
 WHERE errors_per_day.day = requests_per_day.day;`
