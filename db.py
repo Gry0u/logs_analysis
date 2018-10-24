@@ -6,15 +6,15 @@ import psycopg2
 
 DBNAME = "news"
 
-#connect to DB
-db = psycopg2.connect(dbname=DBNAME)
-c = db.cursor()
 
-# 1st question:
-#What are the most popular three articles of all time?
-
+questions = [
+'What are the most popular three articles of all time?',
+'Who are the most popular article authors of all time?',
+'On which days did more than 1% of requests lead to errors?'
+]
 #define SQL query
-query1 = """
+queries = [
+"""
 SELECT title,
        count(*) AS num
 FROM articles,
@@ -26,22 +26,8 @@ GROUP BY title,
          PATH
 ORDER BY num DESC
 LIMIT 3;
+""",
 """
-
-#execute query
-c.execute(query1)
-results= c.fetchall()
-
-#print results
-print('Most popular 3 articles of all time:')
-for result in results:
-    print(result[0]+': '+str(result[1])+' views')
-
-print()
-
-# 2nd question:
-# Who are the most popular article authors of all time?
-query2 = """
 SELECT name,
        count(*) AS num
 FROM authors,
@@ -53,23 +39,24 @@ WHERE log.path = CONCAT('/article/', articles.slug)
 GROUP BY author,
          name
 ORDER BY num DESC;
-"""
+""",
+"SELECT day, error_rate FROM error_rates WHERE error_rate >1;"
+]
 
-c.execute(query2)
-results= c.fetchall()
-print('Most popular articles of all time:')
-for result in results:
-    print(result[0]+': '+str(result[1])+' views')
+def report(questions, queries):
+    db = psycopg2.connect(dbname=DBNAME)
+    c = db.cursor()
+    for question, query in zip(questions, queries):
+        c.execute(query)
+        results= c.fetchall()
+        print(question)
+        for result in results:
+            try:
+                print(result[0] + ': ' + str(result[1]) + ' views')
+            except TypeError:
+                print(result[0].strftime("%B %d, %Y") + ': ' + str(result[1])+'%')
+        print()
+    return
 
-print()
-
-# 3rd question:
-# On which days did more than 1% of requests
-# lead to errors?
-query3 = "SELECT day, error_rate FROM error_rates WHERE error_rate >1;"
-
-c.execute(query3)
-results = c.fetchall()
-print(r'Day where more than 1% of requets lead to errors')
-for result in results:
-    print(result[0].strftime("%B %d, %Y")+': '+str(result[1])+'%')
+if __name__ == '__main__':
+    report(questions, queries)
