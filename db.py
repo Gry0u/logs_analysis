@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # "Database code" for the DB Forum.
 
 import psycopg2
@@ -12,12 +14,19 @@ c = db.cursor()
 #What are the most popular three articles of all time?
 
 #define SQL query
-query1 = "SELECT title, count(*) as num \
-FROM articles, log \
-WHERE path like '%'||slug||'%' \
-and status not like '400%' \
-GROUP BY title, slug, path \
-ORDER BY num DESC LIMIT 3;"
+query1 = """
+SELECT title,
+       count(*) AS num
+FROM articles,
+     log
+WHERE PATH LIKE '%'||slug||'%'
+  AND status NOT LIKE '400%'
+GROUP BY title,
+         slug,
+         PATH
+ORDER BY num DESC
+LIMIT 3;
+"""
 
 #execute query
 c.execute(query1)
@@ -32,13 +41,19 @@ print()
 
 # 2nd question:
 # Who are the most popular article authors of all time?
-query2 = "SELECT name, count(*) as num \
-FROM authors, articles, log \
-WHERE path like '%'||slug||'%' \
-AND author = authors.id \
-AND status not like '400%' \
-GROUP BY author, name \
-ORDER BY num DESC;"
+query2 = """
+SELECT name,
+       count(*) AS num
+FROM authors,
+     articles,
+     log
+WHERE PATH LIKE '%'||slug||'%'
+  AND author = authors.id
+  AND status NOT LIKE '400%'
+GROUP BY author,
+         name
+ORDER BY num DESC;
+"""
 
 c.execute(query2)
 results= c.fetchall()
