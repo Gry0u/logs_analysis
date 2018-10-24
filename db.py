@@ -66,9 +66,10 @@ print()
 # 3rd question:
 # On which days did more than 1% of requests
 # lead to errors?
-query3 = "SELECT day FROM error_rates WHERE error_rate >1;"
+query3 = "SELECT day, error_rate FROM error_rates WHERE error_rate >1;"
 
 c.execute(query3)
 results = c.fetchall()
 print(r'Day where more than 1% of requets lead to errors')
-print(results[0][0].strftime("%B %d, %Y"))
+for result in results:
+    print(result[0].strftime("%B %d, %Y")+': '+str(result[1])+'%')
