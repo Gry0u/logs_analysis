@@ -10,8 +10,7 @@ on the articles popularity.
   virtual machine configuration files
   - Change to the `\vagrant` directory
   - Start the virtual machine: `vagrant up` then `vagrant ssh`
-2. [Download newsdata database]
-(https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip)
+2. [Download newsdata database](https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip)
 and place it in the `\vagrant` directory.
 4. Load the data: `psql -d news -f newsdata.sql`
 5. Connect to the database: `psql -d news`
